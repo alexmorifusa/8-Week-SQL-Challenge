@@ -1,4 +1,5 @@
 # Case Study #1 - Danny's Diner
+
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/9533bb2f-0dea-4ebc-a966-51dbb54843dd)
 
 # Task At Hand:
