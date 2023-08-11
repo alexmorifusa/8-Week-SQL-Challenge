@@ -43,7 +43,9 @@ Using the WITH clause, I created a temporary table called first_item that inner 
 
 ### 4) What is the most purchased item on the menu and how many times was it purchased by all customers?
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/fb52aa9b-73ef-4d89-9477-fba0e8c66c0a)
+
 ^ Produces all purchased items from most purchased to least so I added a LIMIT to just the most.
+
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/bcc2fc32-b446-490e-9b7e-ec2a60d2065f)
 ### Thought Process:
 This question does not require me to separate by each customer which makes my life a little easier. I used the COUNT() function to count all products by their id and grouped each product by their name. To find the most purchased item, I ordered the table the purchased items in DESC order and added LIMIT 1 to only return a table with the most purchased item. 
