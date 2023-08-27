@@ -4,27 +4,67 @@
 # Questions:
 ## A. Pizza Metrics
 ### Q1) How many pizzas were ordered?
-![image](https://github.com/alexmorifusa/SQL/assets/137368881/67f984b9-d712-4047-9e94-61fa31ba0fdf)
+```sql
+SELECT
+COUNT(customer_orders.order_id) AS total_orders
+FROM pizza_runner.customer_order
+```
 ![imgage](https://github.com/alexmorifusa/SQL/assets/137368881/167b39c6-19b8-4122-a5cd-5a8ada8e20d5)
 
 ### Q2) How many unique customer orders were made?
-![imgage](https://github.com/alexmorifusa/SQL/assets/137368881/603155f7-f6af-440e-a08c-f47c13d08db7)
+```sql
+SELECT
+COUNT(DISTINCT order_id) AS unique_orders
+FROM pizza_runner.customer_orders
+```
 ![imgage](https://github.com/alexmorifusa/SQL/assets/137368881/25118e3e-dd2a-409d-b79e-9732bd9e9191)
 
 ### Q3) How many successful orders were delivered by each runner?
-![image](https://github.com/alexmorifusa/SQL/assets/137368881/07edce3f-ab69-457a-ba76-a5f8c7bbc590)
+```sql
+SELECT
+runner_id, COUNT(order_id) AS successful_orders
+FROM pizza_runner.runner_orders
+WHERE distance != 'null'
+GROUP BY runner_id
+ORDER BY runner_id ASC
+```
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/c737d411-c9e9-4986-9bfb-cba168a17e16)
 
 ### Q4) How many of each type of pizza was delivered?
-![image](https://github.com/alexmorifusa/SQL/assets/137368881/0f40b8d3-d99e-49a0-8130-9d8dfee492d1)
+```sql
+SELECT
+pizza_name, COUNT(customer_orders.pizza_id) AS delivered_orders
+FROM pizza_runner.customer_orders
+INNER JOIN pizza_runner.pizza_names
+ON customer_orders.pizza_id = pizza_names.pizza_id
+INNER JOIN pizza_runner.runner_orders
+ON customer_orders.order_id = runner_orders.order_id
+WHERE distance != 'null'
+GROUP BY pizza_name
+```
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/c902219d-c957-4d8b-bebf-e2d5e2352e67)
 
 ### Q5) How many Vegetarian and Meatlovers were ordered by each customer?
-![image](https://github.com/alexmorifusa/SQL/assets/137368881/c197ca6c-210e-4593-b701-43aa519a003a)
+```sql
+SELECT
+customer_id, pizza_name, COUNT(pizza_name) AS num_orders
+FROM pizza_runner.customer_orders
+INNER JOIN pizza_runner.pizza_names
+ON cutomer_orders.pizza_id = pizza_names.pizza_id
+GROUP BY customer_id, pizza_name
+ORDER BY customer_id
+```
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/abe34f0c-fb0f-4adc-8403-3f9e20e194e9)
 
 ### Q6) What was the maximum number of pizzas delivered in a single order?
-![image](https://github.com/alexmorifusa/SQL/assets/137368881/0cc64595-c38c-42eb-95ab-a5055c972f20)
+```sql
+SELECT
+customer_id, order_id, COUNT(order_id) AS num_pizzas
+FROM pizza_runner.customer_orders
+GROUP BY customer_id, order_id
+ORDER BY num_pizzas DESC
+LIMIT 1
+```
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/4b4348ba-9e11-4707-9181-d1e41bfd5ea1)
 
 ### Q7) For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
