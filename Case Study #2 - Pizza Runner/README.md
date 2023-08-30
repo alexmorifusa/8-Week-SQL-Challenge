@@ -48,12 +48,13 @@ GROUP BY pizza_name
 ```sql
 SELECT
 customer_id, pizza_name, COUNT(pizza_name) AS num_orders
-FROM pizza_runner.customer_orders
-INNER JOIN pizza_runner.pizza_names
-ON cutomer_orders.pizza_id = pizza_names.pizza_id
+FROM pizza_runner.customer_orders AS c
+INNER JOIN pizza_runner.pizza_names AS p
+ON c.pizza_id = p.pizza_id
 GROUP BY customer_id, pizza_name
 ORDER BY customer_id
 ```
+Without aliasing, I kept on running into an error of "missing FROM-clause entry for table". Aliasing the table names helped get ride of those errors and run my code.
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/abe34f0c-fb0f-4adc-8403-3f9e20e194e9)
 
 ### Q6) What was the maximum number of pizzas delivered in a single order?
@@ -68,8 +69,12 @@ LIMIT 1
 ![image](https://github.com/alexmorifusa/SQL/assets/137368881/4b4348ba-9e11-4707-9181-d1e41bfd5ea1)
 
 ### Q7) For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+```sql
 
+```
 ### Q8) How many pizzas were delivered that had both exclusions and extras?
+```sql
 
+```
 ### Q9) What was the total volume of pizzas ordered for each hour of the day?
 ### Q10) What was the volume of orders for each day of the week?
