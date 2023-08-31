@@ -70,11 +70,66 @@ LIMIT 1
 
 ### Q7) For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 ```sql
-
+SELECT 
+  c.customer_id,
+  SUM(
+    CASE WHEN c.exclusions IS NOT NULL OR c.extras IS NOT NULL THEN 1
+    ELSE 0
+    END) AS change_made,
+  SUM(
+    CASE WHEN c.exclusions IS NULL AND c.extras IS NULL THEN 1 
+    ELSE 0
+    END) AS no_change
+FROM pizza_runner.customer_orders AS c
+JOIN pizza_runner.runner_orders AS r
+  ON c.order_id = r.order_id
+WHERE r.distance IS NOT NULL
+GROUP BY c.customer_id
+ORDER BY c.customer_id;
 ```
+I had to clean the exclusions and extras column in customer_orders so all null or '' values were set as NULL so I could accurately count whether a customer asked for a change or not. This was the same for the runner_orders table so I can accurately check if the order was cancelled or not. 
+<img src="https://github.com/alexmorifusa/SQL/assets/137368881/eadcdaa4-02ba-4e45-b0c4-36611e834427">
+
 ### Q8) How many pizzas were delivered that had both exclusions and extras?
 ```sql
-
+SELECT 
+  c.customer_id,
+  SUM(
+    CASE WHEN c.exclusions IS NOT NULL AND c.extras IS NOT NULL THEN 1
+    ELSE 0
+    END) AS both_changes
+FROM pizza_runner.customer_orders AS c
+JOIN pizza_runner.runner_orders AS r
+  ON c.order_id = r.order_id
+WHERE r.distance IS NOT NULL
+GROUP BY c.customer_id
+ORDER BY c.customer_id;
 ```
+<img  src="https://github.com/alexmorifusa/SQL/assets/137368881/0e2e8f12-ae2b-408f-8df8-bfe70ec4b4f0">
+
 ### Q9) What was the total volume of pizzas ordered for each hour of the day?
+USING the EXTRACT() function I can return a specific part of the day (the hour in this case).
+```sql
+SELECT
+EXTRACT(hour FROM c.order_time) AS hour,
+COUNT(order_id) AS pizza_orders
+FROM pizza_runner.customer_orders AS c
+GROUP BY hour
+ORDER BY hour
+```
+<img src="https://github.com/alexmorifusa/SQL/assets/137368881/a7b78eef-7778-424a-a632-7189cfbf699d">
+
 ### Q10) What was the volume of orders for each day of the week?
+```sql
+SELECT
+TO_CHAR(order_time + INTERVAL '2 day', 'DAY') AS day_of_week,
+  COUNT(order_id) AS total_pizzas_ordered
+FROM pizza_runner.customer_orders
+GROUP BY day_of_week
+ORDER BY day_of_week
+```
+I used TO_CHAR to extract the day of the week as a name from a date column. I also had to add 2 days to order_time to get the accurate day of the week since 01/01/2020 was on a Friday.
+<img src="https://github.com/alexmorifusa/SQL/assets/137368881/054aa8a9-b53c-46e5-a89b-a06a0378828e">
+
+Reflection:
+I ran into a couple troubles since some functions and values were treated differently in PostgreSQL. I also should have cleaned and organized my data at the start. 
